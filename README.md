@@ -20,5 +20,5 @@ extract dan taruh pada folder xampp/htdocs
 aktifkan MySQL pada aplikasi xampp 
 lalu import database ke [localhost](http://localhost/phpmyadmin) 
 buat nama database sesuai dengan "poliklinik" dalam folder db
-lalu run localhost dan folder yang dituju semisalkan http://localhost/bengkodBK/bengkodBK-main/
+lalu run localhost dan folder yang dituju semisalkan http://localhost/BingkarBengkod/
 ```
