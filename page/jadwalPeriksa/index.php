@@ -213,9 +213,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id']) && isset($_POST
                                                 <form action="page/jadwalPeriksa/updateJadwal.php" method="POST">
                                                     <input type="hidden" name="id" value="<?php echo $data['id']; ?>">
 
-                                                    <div class="form-group">
+                                                    <div class="form-group" >
                                                         <label for="hari">Hari</label>
-                                                        <select class="form-control" id="hari" name="hari" required>
+                                                        <select class="form-control" id="hari" name="hari" disabled>
                                                             <option value="Senin" <?php echo $data['hari'] == 'Senin' ? 'selected' : ''; ?>>Senin</option>
                                                             <option value="Selasa" <?php echo $data['hari'] == 'Selasa' ? 'selected' : ''; ?>>Selasa</option>
                                                             <option value="Rabu" <?php echo $data['hari'] == 'Rabu' ? 'selected' : ''; ?>>Rabu</option>
@@ -225,14 +225,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id']) && isset($_POST
                                                         </select>
                                                     </div>
 
-                                                    <div class="form-group">
+                                                    <div class="form-group" disabled>
                                                         <label for="jamMulai">Jam Mulai</label>
-                                                        <input type="time" class="form-control" id="jamMulai" name="jamMulai" value="<?php echo $data['jam_mulai']; ?>" required>
+                                                        <input type="time" class="form-control" id="jamMulai" name="jamMulai" value="<?php echo $data['jam_mulai']; ?>" disabled>
                                                     </div>
 
-                                                    <div class="form-group">
+                                                    <div class="form-group" disabled>
                                                         <label for="jamSelesai">Jam Selesai</label>
-                                                        <input type="time" class="form-control" id="jamSelesai" name="jamSelesai" value="<?php echo $data['jam_selesai']; ?>" required>
+                                                        <input type="time" class="form-control" id="jamSelesai" name="jamSelesai" value="<?php echo $data['jam_selesai']; ?>" disabled>
                                                     </div>
 
                                                     <div class="form-group">

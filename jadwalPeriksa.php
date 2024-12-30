@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <?php
-    session_start();
-    $id_dokter = $_SESSION['id'];
-    $username = $_SESSION['username'];
-    $id_poli = $_SESSION['id_poli'];
+session_start();
 
-    if ($username == "") {
-        header("location:login.php");
-    }
+// Mendapatkan data session
+$id_dokter = isset($_SESSION['id']) ? $_SESSION['id'] : null;
+$username = isset($_SESSION['username']) ? $_SESSION['username'] : null;
+$id_poli = isset($_SESSION['id_poli']) ? $_SESSION['id_poli'] : null;
+
+// Jika user belum login, arahkan ke halaman login
+if (empty($username)) {
+    header("location:login.php");
+    exit;
+}
 ?>
-<!--
-This is a starter template page. Use this page to start your new project from
-scratch. This page gets rid of all links and provides the needed markup only.
--->
 <html lang="en">
 
 <head>
@@ -21,8 +21,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <title>Udinus Poliklinik</title>
 
     <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="assets/plugins/fontawesome-free/css/all.min.css">
     <!-- Theme style -->
@@ -33,15 +32,38 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <div class="wrapper">
 
         <!-- Navbar -->
-        <?php include ('components/navbar.php') ?>
+        <?php
+        $navbar_file = __DIR__ . '/components/navbar.php';
+        if (file_exists($navbar_file)) {
+            include($navbar_file);
+        } else {
+            echo "<p style='color:red;'>Navbar file not found: $navbar_file</p>";
+        }
+        ?>
         <!-- /.navbar -->
 
         <!-- Main Sidebar Container -->
-        <?php include ('components/sidebar.php') ?>
+        <?php
+        $sidebar_file = __DIR__ . '/components/sidebar.php';
+        if (file_exists($sidebar_file)) {
+            include($sidebar_file);
+        } else {
+            echo "<p style='color:red;'>Sidebar file not found: $sidebar_file</p>";
+        }
+        ?>
+        <!-- /.sidebar -->
+
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
             <!-- Content Header (Page header) -->
-            <?php include ('page/jadwalPeriksa/index.php') ?>
+            <?php
+            $content_file = __DIR__ . '/page/jadwalPeriksa/index.php';
+            if (file_exists($content_file)) {
+                include($content_file);
+            } else {
+                echo "<p style='color:red;'>Content file not found: $content_file</p>";
+            }
+            ?>
             <!-- /.content -->
         </div>
         <!-- /.content-wrapper -->
@@ -50,13 +72,20 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <aside class="control-sidebar control-sidebar-dark">
             <!-- Control sidebar content goes here -->
             <div class="p-3">
-                <h5>Title</h5>
+                <h5>Control Sidebar</h5>
                 <p>Halo</p>
             </div>
         </aside>
         <!-- /.control-sidebar -->
 
-        <!-- Main Footer -->
+        <!-- Footer -->
+        <footer class="main-footer">
+            <div class="float-right d-none d-sm-inline">
+                Anything you want
+            </div>
+            <strong>&copy; 2024 Udinus Poliklinik.</strong> All rights reserved.
+        </footer>
+        <!-- /.footer -->
     </div>
     <!-- ./wrapper -->
 
