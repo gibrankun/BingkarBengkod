@@ -15,6 +15,7 @@
     </div><!-- /.container-fluid -->
 </div>
 <!-- /.content-header -->
+
 <!-- Main content -->
 <div class="content">
     <div class="container-fluid">
@@ -26,7 +27,7 @@
                     </div>
                     <!-- /.card-header -->
 
-
+                    <!-- Bagian ini menampilkan tabel yang berisi daftar riwayat pasien -->
                     <div class="card-body table-responsive p-0">
                         <table class="table table-hover text-nowrap">
                             <thead>
@@ -42,11 +43,13 @@
                             </thead>
                             <tbody>
                                 <?php
-                                $no = 1;
-                                require 'koneksi.php';
+                                $no = 1; // Menyusun nomor urut
+                                require 'koneksi.php'; // Menghubungkan ke file koneksi.php
+                                // Query untuk mengambil data riwayat pasien dari beberapa tabel
                                 $query = "SELECT daftar_poli.status_periksa, periksa.id, pasien.alamat, pasien.id as idPasien, pasien.no_ktp, pasien.no_hp, pasien.no_rm, periksa.tgl_periksa, pasien.nama as namaPasien, dokter.nama, daftar_poli.keluhan, periksa.catatan, GROUP_CONCAT(obat.nama_obat) as namaObat, SUM(obat.harga) AS hargaObat FROM detail_periksa INNER JOIN periksa ON detail_periksa.id_periksa = periksa.id INNER JOIN daftar_poli ON periksa.id_daftar_poli = daftar_poli.id INNER JOIN pasien ON daftar_poli.id_pasien = pasien.id INNER JOIN obat ON detail_periksa.id_obat = obat.id INNER JOIN jadwal_periksa ON daftar_poli.id_jadwal = jadwal_periksa.id INNER JOIN dokter ON jadwal_periksa.id_dokter = dokter.id WHERE status_periksa = '1' GROUP BY pasien.id";
-                                $result = mysqli_query($mysqli, $query);
+                                $result = mysqli_query($mysqli, $query); // Eksekusi query dan simpan hasilnya
 
+                                // Perulangan untuk menampilkan data pasien
                                 while ($data = mysqli_fetch_assoc($result)) {
                                 ?>
                                 <tr>
@@ -57,10 +60,12 @@
                                     <td><?php echo $data['no_hp']; ?></td>
                                     <td><?php echo $data['no_rm']; ?></td>
                                     <td>
+                                        <!-- Tombol untuk membuka modal yang berisi detail riwayat periksa pasien -->
                                         <button type='button' class='btn btn-sm btn-info edit-btn' data-toggle="modal"
                                             data-target="#detailModal<?php echo $data['id'] ?>">Detail
                                             Riwayat Periksa</button>
 
+                                            <!-- Modal yang muncul saat tombol Detail Riwayat Periksa diklik -->
                                             <div class="modal fade" id="detailModal<?php echo $data['id'] ?>">
                                                 <div class="modal-dialog modal-xl">
                                                     <div class="modal-content">
@@ -87,8 +92,9 @@
                                                                     </thead>
                                                                     <tbody>
                                                                         <?php
-                                                                        $idPasien = $data['idPasien'];
+                                                                        $idPasien = $data['idPasien']; // Menyimpan idPasien untuk query selanjutnya
                                                                         $nomor = 1;
+                                                                        // Query untuk mengambil detail periksa pasien berdasarkan idPasien
                                                                         $ambilData = "SELECT detail_periksa.id AS idDetailPeriksa, periksa.tgl_periksa, 
                                                                                     pasien.nama AS namaPasien, dokter.nama, daftar_poli.keluhan, 
                                                                                     periksa.catatan, GROUP_CONCAT(obat.nama_obat) AS namaObat, 
@@ -102,7 +108,8 @@
                                                                                     INNER JOIN dokter ON jadwal_periksa.id_dokter = dokter.id 
                                                                                     WHERE pasien.id = '$idPasien' 
                                                                                     GROUP BY periksa.id, periksa.tgl_periksa";
-                                                                        $results = mysqli_query($mysqli, $ambilData);
+                                                                        $results = mysqli_query($mysqli, $ambilData); // Eksekusi query detail periksa pasien
+                                                                        // Perulangan untuk menampilkan data detail periksa pasien
                                                                         while ($datas = mysqli_fetch_assoc($results)) {
                                                                         ?>
                                                                         <tr>

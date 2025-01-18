@@ -4,11 +4,12 @@ require 'koneksi.php';
 
 // Proses update status aktif/nonaktif
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id']) && isset($_POST['aktif'])) {
-    $id = $_POST['id'];
-    $aktif = $_POST['aktif'];
+    $id = $_POST['id']; // Mendapatkan ID jadwal dari POST request
+    $aktif = $_POST['aktif']; // Mendapatkan status aktif/nonaktif dari POST request
 
     if ($aktif == '1') {
-        // Mendapatkan id_dokter dari jadwal yang diaktifkan
+        // Jika status diubah menjadi aktif, nonaktifkan semua jadwal lain untuk dokter yang sama
+        // Mendapatkan id_dokter berdasarkan ID jadwal yang dipilih
         $queryGetDokter = "SELECT id_dokter FROM jadwal_periksa WHERE id = ?";
         $stmtGetDokter = mysqli_prepare($mysqli, $queryGetDokter);
         mysqli_stmt_bind_param($stmtGetDokter, 'i', $id);
@@ -25,14 +26,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id']) && isset($_POST
         mysqli_stmt_close($stmtDeactivate);
     }
 
-    // Update status aktif/nonaktif untuk jadwal yang dipilih
+    // Mengupdate status aktif/nonaktif untuk jadwal yang dipilih
     $query = "UPDATE jadwal_periksa SET aktif = ? WHERE id = ?";
     $stmt = mysqli_prepare($mysqli, $query);
     mysqli_stmt_bind_param($stmt, 'si', $aktif, $id);
     $execute = mysqli_stmt_execute($stmt);
 
     if ($execute) {
-        // Redirect ke halaman setelah update
+        // Jika berhasil, redirect ke halaman jadwal periksa
         header("Location: index.php?page=jadwalPeriksa");
         exit;
     } else {
@@ -40,11 +41,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id']) && isset($_POST
         echo "Error: " . mysqli_error($mysqli);
     }
 
+    // Menutup statement
     mysqli_stmt_close($stmt);
 }
 ?>
 
-<!-- Content Header (Page header) -->
+<!-- Content Header -->
 <div class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
@@ -52,6 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id']) && isset($_POST
                 <h1 class="m-0">Jadwal Periksa</h1>
             </div>
             <div class="col-sm-6">
+                <!-- Breadcrumb untuk navigasi -->
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="index.php?page=home">Home</a></li>
                     <li class="breadcrumb-item active">Jadwal Periksa</li>
@@ -61,19 +64,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id']) && isset($_POST
     </div>
 </div>
 
-<!-- Main content -->
+<!-- Main Content -->
 <div class="content">
     <div class="container-fluid">
         <div class="row">
             <div class="col-12">
+                <!-- Card untuk daftar jadwal periksa -->
                 <div class="card shadow-lg">
                     <div class="card-header">
                         <h3 class="card-title">Daftar Jadwal Periksa</h3>
                         <div class="card-tools">
-                            <!-- Button untuk Modal Tambah Jadwal -->
+                            <!-- Button Tambah Jadwal -->
                             <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#addModal">Tambah Jadwal Periksa</button>
-
-                            <!-- Button untuk Modal Lihat Jadwal -->
+                            <!-- Button Lihat Jadwal -->
                             <button type="button" class="btn btn-sm btn-warning" data-toggle="modal" data-target="#cekJadwal">Lihat Jadwal</button>
                         </div>
                     </div>
@@ -129,6 +132,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id']) && isset($_POST
                                 </div>
                                 <div class="modal-body">
                                     <div class="card-body table-responsive p-0">
+                                        <!-- Tabel daftar jadwal periksa -->
                                         <table class="table table-hover text-nowrap">
                                             <thead>
                                                 <tr>
@@ -140,10 +144,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id']) && isset($_POST
                                             </thead>
                                             <tbody>
                                                 <?php
-                                                    $ambilDataJadwal = "SELECT id, hari, jam_mulai, jam_selesai FROM jadwal_periksa WHERE id_dokter = '$id_dokter'";
-                                                    $result = mysqli_query($mysqli, $ambilDataJadwal);
-                                                    $nomor = 1;
-                                                    while ($data = mysqli_fetch_assoc($result)) {
+                                                $ambilDataJadwal = "SELECT id, hari, jam_mulai, jam_selesai FROM jadwal_periksa WHERE id_dokter = '$id_dokter'";
+                                                $result = mysqli_query($mysqli, $ambilDataJadwal);
+                                                $nomor = 1;
+                                                while ($data = mysqli_fetch_assoc($result)) {
                                                 ?>
                                                 <tr>
                                                     <td><?php echo $nomor++; ?></td>
@@ -160,7 +164,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id']) && isset($_POST
                         </div>
                     </div>
 
-                    <!-- Table Jadwal -->
+                    <!-- Tabel utama untuk jadwal periksa -->
                     <div class="card-body table-responsive p-0">
                         <table class="table table-hover text-nowrap">
                             <thead>
@@ -213,7 +217,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id']) && isset($_POST
                                                 <form action="page/jadwalPeriksa/updateJadwal.php" method="POST">
                                                     <input type="hidden" name="id" value="<?php echo $data['id']; ?>">
 
-                                                    <div class="form-group" >
+                                                    <div class="form-group">
                                                         <label for="hari">Hari</label>
                                                         <select class="form-control" id="hari" name="hari" disabled>
                                                             <option value="Senin" <?php echo $data['hari'] == 'Senin' ? 'selected' : ''; ?>>Senin</option>
@@ -225,12 +229,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id']) && isset($_POST
                                                         </select>
                                                     </div>
 
-                                                    <div class="form-group" disabled>
+                                                    <div class="form-group">
                                                         <label for="jamMulai">Jam Mulai</label>
                                                         <input type="time" class="form-control" id="jamMulai" name="jamMulai" value="<?php echo $data['jam_mulai']; ?>" disabled>
                                                     </div>
 
-                                                    <div class="form-group" disabled>
+                                                    <div class="form-group">
                                                         <label for="jamSelesai">Jam Selesai</label>
                                                         <input type="time" class="form-control" id="jamSelesai" name="jamSelesai" value="<?php echo $data['jam_selesai']; ?>" disabled>
                                                     </div>

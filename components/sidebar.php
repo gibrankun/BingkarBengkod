@@ -113,6 +113,12 @@
                                 </a>
                             </li>
                             <li class="nav-item">
+                                <a href="konsultasiDokter.php" class="nav-link">
+                                    <i class="fab fa-rocketchat"></i>
+                                    <p>Konsultasi <span class="right badge badge-success">Dokter</span></p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
                                 <a href="profileDokter.php" class="nav-link">
                                     <i class="fas fa-user-md nav-icon"></i>
                                     <p>Profil Dokter <span class="right badge badge-success">Dokter</span></p>
@@ -132,6 +138,12 @@
                                 <a href="daftarPoliklinik.php" class="nav-link">
                                     <i class="fas fa-stethoscope nav-icon"></i>
                                     <p>Daftar Poli <span class="right badge badge-info">Pasien</span></p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="konsultasiPasien.php" class="nav-link">
+                                    <i class="fas fa-book-medical nav-icon"></i>
+                                    <p>Konsultasi Pasien <span class="right badge badge-info">Pasien</span></p>
                                 </a>
                             </li>
                         </ul>
